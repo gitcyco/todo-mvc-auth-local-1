@@ -12,6 +12,13 @@ module.exports = {
     }
   },
   createTicket: async (req, res) => {
+    const validationErrors = [];
+    if (req.body.ticketItem == "") validationErrors.push({ msg: "Please enter ticket information." });
+    if (req.body.urgency == "") validationErrors.push({ msg: "Please enter urgency." });
+    if (validationErrors.length) {
+      req.flash("errors", validationErrors);
+      return res.redirect("/tickets");
+    }
     try {
       await Ticket.create({
         ticket: req.body.ticketItem,
