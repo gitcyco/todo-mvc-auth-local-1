@@ -8,11 +8,12 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h1>Todos</h1>
-    <ul>
+    <section class="mainWrapper">
+    <h1>Open Tickets</h1>
+    <ul class="todoList">
     <% todos.forEach( el => { %>
             <li class='todoItem' data-id='<%=el._id%>'>
-                <span class='<%= el.completed === true ? 'completed' : 'not'%>'><%= el.todo %></span>
+                <span class='<%= el.completed === true ? 'completed' : 'not'%>'> Ticket: <%= el.todo %> </span> <span class='urgent'>Urgency: <%= el.urgency %> </span>
                 <span class='del'> Delete </span>
             </li>
     <% }) %>    
@@ -22,11 +23,18 @@
 
     <form action="/todos/createTodo" method='POST'>
         <input type="text" placeholder="Enter Todo Item" name='todoItem'>
+        <select name="urgency" id="urgency" placeholder="Urgency">
+            <option value=''>--Choose Urgency--</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+        </select>
         <input type="submit">
     </form>
 
     <a href="/logout">Logout</a>
-
+      
     <script src="js/main.js"></script>
+    </section>
 </body>
 </html>
