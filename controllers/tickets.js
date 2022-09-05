@@ -5,7 +5,7 @@ module.exports = {
   getTickets: async (req, res) => {
     console.log(req.user);
     try {
-      const allUsers = await User.find();
+      const allUsers = await User.find({}, { password: 0, email: 0 });
       const ticketItems = await Ticket.find({ userId: req.user.id });
       const itemsLeft = await Ticket.countDocuments({ userId: req.user.id, completed: false });
       res.render("tickets.ejs", { tickets: ticketItems, left: itemsLeft, user: req.user, users: allUsers });
