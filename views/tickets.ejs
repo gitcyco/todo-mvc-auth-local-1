@@ -10,10 +10,10 @@
 <body>
     <section class="mainWrapper">
     <h1>Open Tickets</h1>
-    <ul class="todoList">
-    <% todos.forEach( el => { %>
-            <li class='todoItem' data-id='<%=el._id%>'>
-                <span class='<%= el.completed === true ? 'completed' : 'not'%>'> Ticket: <%= el.todo %> </span> <span class='urgent'>Urgency: <%= el.urgency %> </span>
+    <ul class="ticketList">
+    <% tickets.forEach( el => { %>
+            <li class='ticketItem' data-id='<%=el._id%>'>
+                <span class='<%= el.completed === true ? 'completed' : 'not'%>'> Ticket: <%= el.ticket %> </span> <span class='urgent'>Urgency: <%= el.urgency %> </span>
                 <span class='del'> Delete </span>
             </li>
     <% }) %>    
@@ -21,8 +21,8 @@
 
     <h2><%= user.userName %> has <%= left %> things left to do.</h2>
 
-    <form action="/todos/createTodo" method='POST'>
-        <input type="text" placeholder="Enter Todo Item" name='todoItem'>
+    <form action="/tickets/createTicket" method='POST'>
+        <input type="text" placeholder="Enter Ticket Item" name='ticketItem'>
         <select name="urgency" id="urgency" placeholder="Urgency">
             <option value=''>--Choose Urgency--</option>
             <option value="Low">Low</option>
