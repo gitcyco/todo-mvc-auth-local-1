@@ -23,7 +23,9 @@
     <ul class="ticketList">
     <% tickets.forEach( el => { %>
             <li class='ticketItem' data-id='<%=el._id%>'>
-                <span class='<%= el.completed === true ? 'completed' : 'not'%>'> Ticket: <%= el.ticket %> </span> <span class='urgent'>Urgency: <%= el.urgency %> </span>
+                <span class='<%= el.completed === true ? 'completed' : 'not'%>'> Ticket: <%= el.ticket %> </span> 
+                <span class='urgent'>Urgency: <%= el.urgency %> </span>
+                <span class='assignedBy'>Assigned By: <%= users.find(u => u._id == el.assignedBy).userName %> </span>
                 <span class='del'> Delete </span>
             </li>
     <% }) %>    
@@ -39,6 +41,16 @@
             <option value="Medium">Medium</option>
             <option value="High">High</option>
         </select>
+
+        <select name="assignedUser" id="assignedUser" placeholder="Users">
+            <option value=<%=user._id%> selected><%=user.userName%></option>
+            <% users.forEach( el => { %>
+                <% if (user.userName !== el.userName) { %>
+                    <option value=<%=el._id%>><%=el.userName%></option>    
+                <% } %>
+            <% }) %>
+        </select>
+
         <input type="submit">
     </form>
 

@@ -1,12 +1,14 @@
 const Ticket = require("../models/Ticket");
+const User = require("../models/User");
 
 module.exports = {
   getTickets: async (req, res) => {
     console.log(req.user);
     try {
+      const allUsers = await User.find();
       const ticketItems = await Ticket.find({ userId: req.user.id });
       const itemsLeft = await Ticket.countDocuments({ userId: req.user.id, completed: false });
-      res.render("tickets.ejs", { tickets: ticketItems, left: itemsLeft, user: req.user });
+      res.render("tickets.ejs", { tickets: ticketItems, left: itemsLeft, user: req.user, users: allUsers });
     } catch (err) {
       console.log(err);
     }
@@ -23,10 +25,13 @@ module.exports = {
       await Ticket.create({
         ticket: req.body.ticketItem,
         completed: false,
-        userId: req.user.id,
+        // userId: req.user.id,
+        userId: req.body.assignedUser,
         urgency: req.body.urgency,
+        assignedBy: req.user.id,
       });
       console.log("Ticket has been added!");
+      console.log("Assigned to user: ", req.body.assignedUser, "by", req.user.id);
       res.redirect("/tickets");
     } catch (err) {
       console.log(err);

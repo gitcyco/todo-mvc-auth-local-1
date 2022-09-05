@@ -17,6 +17,10 @@ const TicketSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  assignedBy: {
+    type: String,
+    require: true,
+  },
 });
 
 module.exports = mongoose.model("Ticket", TicketSchema);
