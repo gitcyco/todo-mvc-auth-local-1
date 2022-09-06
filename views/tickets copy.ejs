@@ -22,69 +22,33 @@
             <div class="alert alert-danger"><%= el.msg %></div>
         <% }) %>    
     <% } %>
-    
-    <nav class="navbar navbar-expand-sm navbar-light bg-light">
-        <div class="collapse navbar-collapse" id="collapsibleNavId">
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/tickets">Tickets<span class="sr-only">(current)</span></a>
-                </li>
-                <% if (isAdmin) { %>
-                    <li class="nav-item">
-                        <a name="userAdmin" class="nav-link" href="/userAdmin">User Admin</a>
-                    </li>
-                <% } %>
-                
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions</a>
-                    <div class="dropdown-menu" aria-labelledby="dropdownId">
-                        <a class="dropdown-item" href="#">Action 1</a>
-                        <a class="dropdown-item" href="#">Action 2</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
     <h1>Open Tickets</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Ticket</th>
-                <th>Urgency</th>
-                <th>Assigned By</th>
-                <th>action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% tickets.forEach( el => { %>
-            <tr data-id='<%=el._id%>'>
-                <td scope="row"><%= el.ticket %></td>
-                <td><%= el.urgency %></td>
-                <td><%= users.find(u => u._id == el.assignedBy).userName %></td>
-                <td data-id='<%=el._id%>'><button type="button" class="del btn btn-primary btn-sm">delete</button></td>
-            </tr>
-            <% }) %>
-        </tbody>
-    </table>
-
-
-
-
+    <ul class="ticketList">
+    <% tickets.forEach( el => { %>
+            <li class='ticketItem' data-id='<%=el._id%>'>
+                <span class='<%= el.completed === true ? 'completed' : 'not'%>'> Ticket: <%= el.ticket %> </span> 
+                <span class='urgent'>Urgency: <%= el.urgency %> </span>
+                <span class='assignedBy'>Assigned By: <%= users.find(u => u._id == el.assignedBy).userName %> </span>
+                <span class='del'> Delete </span>
+            </li>
+    <% }) %>    
+    </ul>
 
     <h2><%= user.userName %> has <%= left %> things left to do.</h2>
+    <% if (isAdmin) { %>
+        <a name="userAdmin" id="" class="btn btn-primary" href="/userAdmin" role="button">Admin Panel</a>
+    <% } %>
 
     <form action="/tickets/createTicket" method='POST'>
         <input type="text" placeholder="Enter Ticket Item" name='ticketItem'>
-        <select class = "m-1" name="urgency" id="urgency" placeholder="Urgency">
+        <select name="urgency" id="urgency" placeholder="Urgency">
             <option value=''>--Choose Urgency--</option>
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
             <option value="High">High</option>
         </select>
 
-        <select class = "m-1" name="assignedUser" id="assignedUser" placeholder="Users">
+        <select name="assignedUser" id="assignedUser" placeholder="Users">
             <option value=<%=user._id%> selected><%=user.userName%></option>
             <% users.forEach( el => { %>
                 <% if (user.userName !== el.userName) { %>
