@@ -1,5 +1,8 @@
 module.exports = {
-    getIndex: (req,res)=>{
-        res.render('index.ejs')
+  getIndex: (req, res) => {
+    if (req.user) {
+      return res.redirect("/tickets");
     }
-}
+    res.render("index.ejs");
+  },
+};

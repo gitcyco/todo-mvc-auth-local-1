@@ -33,6 +33,7 @@ app.use(
     store: MongoStore.create({
       mongoUrl: process.env.DB_STRING,
     }),
+    rolling: true,
   })
 );
 
