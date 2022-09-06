@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <section class="mainWrapper">
+    <% if (locals.messages.errors) { %>
+        <% messages.errors.forEach( el => { %>
+            <div class="alert alert-danger"><%= el.msg %></div>
+        <% }) %>    
+    <% } %>
+    <% if (locals.messages.info) { %>
+        <% messages.info.forEach( el => { %>
+            <div class="alert alert-danger"><%= el.msg %></div>
+        <% }) %>    
+    <% } %>
+    <h1>Open Tickets</h1>
+    <ul class="ticketList">
+    <% tickets.forEach( el => { %>
+            <li class='ticketItem' data-id='<%=el._id%>'>
+                <span class='<%= el.completed === true ? 'completed' : 'not'%>'> Ticket: <%= el.ticket %> </span> 
+                <span class='urgent'>Urgency: <%= el.urgency %> </span>
+                <span class='assignedBy'>Assigned By: <%= users.find(u => u._id == el.assignedBy).userName %> </span>
+                <span class='del'> Delete </span>
+            </li>
+    <% }) %>    
+    </ul>
+
+    <h2><%= user.userName %> has <%= left %> things left to do.</h2>
+
+    <form action="/tickets/createTicket" method='POST'>
+        <input type="text" placeholder="Enter Ticket Item" name='ticketItem'>
+        <select name="urgency" id="urgency" placeholder="Urgency">
+            <option value=''>--Choose Urgency--</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+        </select>
+
+        <select name="assignedUser" id="assignedUser" placeholder="Users">
+            <option value=<%=user._id%> selected><%=user.userName%></option>
+            <% users.forEach( el => { %>
+                <% if (user.userName !== el.userName) { %>
+                    <option value=<%=el._id%>><%=el.userName%></option>    
+                <% } %>
+            <% }) %>
+        </select>
+
+        <input type="submit">
+    </form>
+
+    <a href="/logout">Logout</a>
+      
+    <script src="js/main.js"></script>
+    </section>
+</body>
+</html>
