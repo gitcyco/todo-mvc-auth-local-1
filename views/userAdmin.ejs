@@ -28,24 +28,26 @@
             <div class="collapse navbar-collapse" id="collapsibleNavId">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/tickets">Tickets<span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="/tickets">My Tickets<span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">User Admin</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions</a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownId">
-                            <a class="dropdown-item" href="#">Action 1</a>
-                            <a class="dropdown-item" href="#">Action 2</a>
-                        </div>
+                    <% if (isAdmin) { %>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownId">
+                                <a class="dropdown-item" href="/userAdmin">Users</a>
+                                <a class="dropdown-item" href="/ticketsAdmin">Tickets</a>
+                            </div>
+                        </li>
+                    <% } %>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
                     </li>
                 </ul>
             </div>
         </nav>
         <h1>User Administration</h1>
-        <table class="table">
-            <thead>
+        <table class="table table-striped">
+            <thead class="thead-dark">
                 <tr>
                     <th>User Name</th>
                     <th>Email</th>
@@ -68,9 +70,7 @@
         </table>
             
     
-        <h2><%= user.userName %> Administrator Panel</h2>
-        
-        <a href="/logout">Logout</a>
+        <!-- <h2><%= user.userName %> Administrator Panel</h2> -->
           
     </section>
     <script src="js/admin.js"></script>

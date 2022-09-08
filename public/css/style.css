@@ -1,14 +1,15 @@
-h1 {
+/* h1 {
   color: blue;
 }
 .completed {
   text-decoration: line-through;
   color: gray;
-}
+} */
 
 /* .urgent {
   margin-left: 10px;
 } */
+
 .ticketList {
   width: 100%;
   display: flex;
@@ -19,15 +20,37 @@ h1 {
   flex-direction: column;
   font-size: 20px;
 }
+
 .mainWrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 50%;
+  width: 80%;
   margin: 0 auto;
 }
+
 .del {
   color: red;
-  text-decoration: underline;
+}
+
+/* .low {
+  color: blue;
+}
+
+.medium {
+  color: orange;
+}
+
+.high {
+  color: red;
+} */
+
+.edit-btn {
+  width: 80%;
+}
+
+.save-btn,
+.cancel-btn {
+  width: 39%;
 }
