@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/> -->
     <title>Tickets Administration</title>
     <link rel="stylesheet" href="css/style.css">
 
@@ -63,18 +66,17 @@
                 <th>Assigned To</th>
                 <th>Completed</th>
                 <th>Remove</th>
-                <th style="width:200px">Edit</th>
+                <th class="admin-heading">Edit</th>
             </tr>
         </thead>
         <tbody>
             <% tickets.forEach( el => { %>
             <tr class=<%= statusColors[el.urgency]%> data-id='<%=el._id%>'>
-                <td scope="row" contenteditable='true'><%= el.ticket %></td>
-                <td class = ""><%= el.urgency %></td>
-                <td ><%= el.assignedFromUserName %></td>
-                <!-- <td ><%= el.assignedToUserName %></td> -->
-                <td>
-                    <select class = "m-1 <%=el._id%>" name="assignedTableUser" id="assignedTableUserId" placeholder="" disabled>
+                <td id="ticket-<%= el._id%>" class="ticketTextBox" scope="row" ><%= el.ticket %></td>
+                <td id="urgency-<%= el._id%>"><%= el.urgency %></td>
+                <td id="assignedFromUserName-<%= el._id%>"><%= el.assignedFromUserName %></td>
+                <td data-id='<%=el._id%>'>
+                    <select id="assignedTableUser-<%= el._id%>" class = "<%=el._id%> m-1 assignedToSelect" name="assignedTableUser" placeholder="" disabled>
                         <option value=<%=el.userId%> selected><%=el.assignedToUserName%></option>
                         <% users.forEach( usr => { %>
                             <% if (el.userId !== usr.userId) { %>
@@ -82,8 +84,8 @@
                         <% }}) %>
                     </select>
                 </td>
-                <td data-id='<%=el._id%>'><input type="checkbox" class="completedCheckBox <%=el._id%>" name="completedCheckBox" <%= el.completed ? 'checked' : '' %> disabled></td>
-                <td data-id='<%=el._id%>'><button type="button" class="del btn btn-primary btn-sm <%=el._id%>" disabled>delete</button></td>
+                <td data-id='<%=el._id%>'><input id="completedCheckBox-<%= el._id%>" type="checkbox" class="completedCheckBox <%=el._id%>" name="completedCheckBox" <%= el.completed ? 'checked' : '' %> disabled></td>
+                <td data-id='<%=el._id%>'><button type="button" class="deleteBtn del btn btn-primary btn-sm <%=el._id%>" disabled>delete</button></td>
                 <td data-id='<%=el._id%>'>
                     <button type="button" class="edit-btn btn btn-primary btn-sm  <%=el._id%>">edit</button>
                     <button type="button" class="save-btn btn btn-primary btn-sm d-none   <%=el._id%>">save</button>

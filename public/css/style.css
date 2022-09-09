@@ -47,10 +47,15 @@
 } */
 
 .edit-btn {
-  width: 80%;
+  width: 100%;
 }
 
 .save-btn,
 .cancel-btn {
-  width: 39%;
+  width: 48%;
+  margin: 0;
+}
+
+.admin-heading {
+  width: 150px;
 }

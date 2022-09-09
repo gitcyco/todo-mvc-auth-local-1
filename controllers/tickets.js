@@ -93,4 +93,39 @@ module.exports = {
       console.log(err);
     }
   },
+  updateTicket: async (req, res) => {
+    console.log("UPDATE TICKET");
+    try {
+      await Ticket.findOneAndUpdate({ _id: req.body.ticketId }, [
+        {
+          $set: {
+            completed: req.body.completedCheckBox,
+            ticket: req.body.ticketText,
+            urgency: req.body.urgency,
+            userId: req.body.assignedToId,
+            assignedBy: req.user.id,
+          },
+        },
+      ]);
+      console.log("Update Complete");
+      res.json("Update Complete");
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  // MODEL
+  //   ticket: req.body.ticketItem,
+  //         completed: false,
+  //         // userId: req.user.id,
+  //         userId: req.body.assignedUser,
+  //         urgency: req.body.urgency,
+  //         assignedBy: req.user.id,
+
+  // JSON from request:
+  //   ticketId: rowItems.ticketId,
+  //   ticketText: rowItems.ticket,
+  //   urgency: rowItems.urgency,
+  //   assignedToId: rowItems.assignedTableUser,
+  //   completedCheckBox: rowItems.completedCheckBox,
 };
