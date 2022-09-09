@@ -6,9 +6,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
+    <% let statusColors = {
+        Low: "table-info",
+        Medium: "table-warning",
+        High: "table-danger",
+        } 
+    %>
     <section class="mainWrapper">
+        
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="collapsibleNavId">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/tickets">My Tickets<span class="sr-only">(current)</span></a>
+                </li>
+                <% if (isAdmin) { %>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownId">
+                            <a class="dropdown-item" href="/userAdmin">Users</a>
+                            <a class="dropdown-item" href="/ticketsAdmin">Tickets</a>
+                        </div>
+                    </li>
+                <% } %>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Flash error messages -->
     <% if (locals.messages.errors) { %>
         <% messages.errors.forEach( el => { %>
             <div class="alert alert-danger"><%= el.msg %></div>
@@ -19,30 +52,78 @@
             <div class="alert alert-danger"><%= el.msg %></div>
         <% }) %>    
     <% } %>
-    <h1>Open Tickets</h1>
-    <ul class="ticketList">
-    <% tickets.forEach( el => { %>
-            <li class='ticketItem' data-id='<%=el._id%>'>
-                <span class='<%= el.completed === true ? 'completed' : 'not'%>'> Ticket: <%= el.ticket %> </span> 
-                <span class='urgent'>Urgency: <%= el.urgency %> </span>
-                <span class='assignedBy'>Assigned By: <%= users.find(u => u._id == el.assignedBy).userName %> </span>
-                <span class='del'> Delete </span>
-            </li>
-    <% }) %>    
-    </ul>
 
+    <h1>Open Tickets</h1>
     <h2><%= user.userName %> has <%= left %> things left to do.</h2>
 
-    <form action="/tickets/createTicket" method='POST'>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Ticket</th>
+                <th>Urgency</th>
+                <th>Assigned By</th>
+                <th>Completed</th>
+                <th>action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% tickets.forEach( el => { %>
+                <tr class=<%= statusColors[el.urgency]%> data-id='<%=el._id%>'>
+                    <td scope="row"><%= el.ticket %></td>
+                    <td><%= el.urgency %></td>
+                    <td><%= users.find(u => u._id == el.assignedBy).userName %></td>
+                    <td data-id='<%=el._id%>'><input type="checkbox" class="completedCheckBox" name="completedCheckBox" <%= el.completed ? 'checked' : '' %>></td>
+                    <td data-id='<%=el._id%>'><button type="button" class="del btn btn-primary btn-sm">delete</button></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>Ticket</th>
+                <th>Urgency</th>
+                <th>Assign To</th>
+                <th>action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <form action="/tickets/createTicket" method='POST'>
+                    <td><input type="text" placeholder="Enter Ticket Item" name='ticketItem'></td>
+                    <td><select class = "m-1" name="urgency" id="urgency" placeholder="Urgency">
+                        <option value=''>--Choose Urgency--</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select></td>
+            
+                    <td><select class = "m-1" name="assignedUser" id="assignedUser" placeholder="Users">
+                        <option value=<%=user._id%> selected><%=user.userName%></option>
+                        <% users.forEach( el => { %>
+                            <% if (user.userName !== el.userName) { %>
+                                <option value=<%=el._id%>><%=el.userName%></option>    
+                            <% } %>
+                        <% }) %>
+                    </select></td>
+            
+                    <td><input class="btn btn-primary btn-sm" type="submit" value="New Ticket"></td>
+                </form>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- <form action="/tickets/createTicket" method='POST'>
         <input type="text" placeholder="Enter Ticket Item" name='ticketItem'>
-        <select name="urgency" id="urgency" placeholder="Urgency">
+        <select class = "m-1" name="urgency" id="urgency" placeholder="Urgency">
             <option value=''>--Choose Urgency--</option>
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
             <option value="High">High</option>
         </select>
 
-        <select name="assignedUser" id="assignedUser" placeholder="Users">
+        <select class = "m-1" name="assignedUser" id="assignedUser" placeholder="Users">
             <option value=<%=user._id%> selected><%=user.userName%></option>
             <% users.forEach( el => { %>
                 <% if (user.userName !== el.userName) { %>
@@ -52,11 +133,15 @@
         </select>
 
         <input type="submit">
-    </form>
-
-    <a href="/logout">Logout</a>
+    </form> -->
       
     <script src="js/main.js"></script>
     </section>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>

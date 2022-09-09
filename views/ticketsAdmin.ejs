@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tickets Administration</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <% let statusColors = {
+        Low: "table-info",
+        Medium: "table-warning",
+        High: "table-danger",
+        } 
+    %>
+    <section class="mainWrapper">
+    <% if (locals.messages.errors) { %>
+        <% messages.errors.forEach( el => { %>
+            <div class="alert alert-danger"><%= el.msg %></div>
+        <% }) %>    
+    <% } %>
+    <% if (locals.messages.info) { %>
+        <% messages.info.forEach( el => { %>
+            <div class="alert alert-danger"><%= el.msg %></div>
+        <% }) %>    
+    <% } %>
+    
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="collapsibleNavId">
+            <ul class="navbar-nav mx-auto mt-2 mt-lg-0 justify-content-center">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/tickets">My Tickets<span class="sr-only">(current)</span></a>
+                </li>
+                <% if (isAdmin) { %>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownId">
+                        <a class="dropdown-item" href="/userAdmin">Users</a>
+                        <a class="dropdown-item" href="/ticketsAdmin">Tickets</a>
+                    </div>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
+                </li>
+                <% } %>
+            </ul>
+        </div>
+    </nav>
+
+    <h1 class="text-center">All Open Tickets</h1>
+    <h2 class="text-center"><%= left %> incomplete tickets in the system.</h2>
+    
+    <table class="table table-striped table-bordered atable-responsive amx-auto aw-auto">
+        <thead class="thead-dark">
+            <tr>
+                <th>Ticket</th>
+                <th>Urgency</th>
+                <th>Assigned By</th>
+                <th>Assigned To</th>
+                <th>Completed</th>
+                <th>Remove</th>
+                <th style="width:200px">Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% tickets.forEach( el => { %>
+            <tr class=<%= statusColors[el.urgency]%> data-id='<%=el._id%>'>
+                <td scope="row" contenteditable='true'><%= el.ticket %></td>
+                <td class = ""><%= el.urgency %></td>
+                <td ><%= el.assignedFromUserName %></td>
+                <!-- <td ><%= el.assignedToUserName %></td> -->
+                <td>
+                    <select class = "m-1 <%=el._id%>" name="assignedTableUser" id="assignedTableUserId" placeholder="" disabled>
+                        <option value=<%=el.userId%> selected><%=el.assignedToUserName%></option>
+                        <% users.forEach( usr => { %>
+                            <% if (el.userId !== usr.userId) { %>
+                                <option value=<%=usr._id%>><%=usr.userName%></option>    
+                        <% }}) %>
+                    </select>
+                </td>
+                <td data-id='<%=el._id%>'><input type="checkbox" class="completedCheckBox <%=el._id%>" name="completedCheckBox" <%= el.completed ? 'checked' : '' %> disabled></td>
+                <td data-id='<%=el._id%>'><button type="button" class="del btn btn-primary btn-sm <%=el._id%>" disabled>delete</button></td>
+                <td data-id='<%=el._id%>'>
+                    <button type="button" class="edit-btn btn btn-primary btn-sm  <%=el._id%>">edit</button>
+                    <button type="button" class="save-btn btn btn-primary btn-sm d-none   <%=el._id%>">save</button>
+                    <button type="button" class="cancel-btn btn btn-primary btn-sm d-none <%=el._id%>">cancel</button>
+                </td>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+      
+    <script src="js/admin.js"></script>
+    </section>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

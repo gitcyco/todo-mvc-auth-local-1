@@ -13,7 +13,7 @@ exports.getLogin = (req, res) => {
 };
 
 exports.postLogin = (req, res, next) => {
-  console.log("AUTH postLogin: ", req.body);
+  // console.log("AUTH postLogin: ", req.body);
   const validationErrors = [];
   if (!validator.isEmail(req.body.email)) validationErrors.push({ msg: "Please enter a valid email address." });
   if (validator.isEmpty(req.body.password)) validationErrors.push({ msg: "Password cannot be blank." });
@@ -90,6 +90,7 @@ exports.postSignup = (req, res, next) => {
     userName: req.body.userName,
     email: req.body.email,
     password: req.body.password,
+    isAdmin: false,
   });
 
   User.findOne({ $or: [{ email: req.body.email }, { userName: req.body.userName }] }, (err, existingUser) => {

@@ -3,12 +3,19 @@ const User = require("../models/User");
 
 module.exports = {
   getTickets: async (req, res) => {
-    console.log(req.user);
+    // console.log(req.user);
     try {
       const allUsers = await User.find({}, { password: 0, email: 0 });
+      const adminUser = await User.find({ userName: req.user.userName, isAdmin: true }, { password: 0, email: 0 });
       const ticketItems = await Ticket.find({ userId: req.user.id });
       const itemsLeft = await Ticket.countDocuments({ userId: req.user.id, completed: false });
-      res.render("tickets.ejs", { tickets: ticketItems, left: itemsLeft, user: req.user, users: allUsers });
+      res.render("tickets.ejs", {
+        tickets: ticketItems,
+        left: itemsLeft,
+        user: req.user,
+        users: allUsers,
+        isAdmin: adminUser.length > 0 ? true : false,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -47,6 +54,17 @@ module.exports = {
       );
       console.log("Marked Complete");
       res.json("Marked Complete");
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  toggleComplete: async (req, res) => {
+    try {
+      await Ticket.findOneAndUpdate({ _id: req.body.ticketIdFromJSFile }, [
+        { $set: { completed: req.body.completedCheckBox } },
+      ]);
+      console.log("Toggled Complete");
+      res.json("Toggled Complete");
     } catch (err) {
       console.log(err);
     }
