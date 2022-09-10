@@ -1,6 +1,6 @@
 # Introduction
 
-## A Simple Ticket Management App that is built using the MVC Architecture, we have also implemented "authorization" so folx can sign up, customize & personalize the app
+A Simple Ticket Management App that is built using the MVC Architecture, we have also implemented "authorization" so users can sign up, customize & personalize the app.
 
 ---
 
